@@ -18,7 +18,8 @@ public class SimpleTest extends TestRunner {
     public void test() {
         loginPage
                 .navigate()
-                .sayHello();
+                .sayHello()
+                .waitPageToLoad();
 
         System.out.println(properties.getLoginUrl());
     }

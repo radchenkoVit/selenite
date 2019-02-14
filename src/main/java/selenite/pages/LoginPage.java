@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import selenite.configuration.ConfigProperties;
+import selenite.utils.wait.SmartWait;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -16,10 +17,12 @@ public class LoginPage implements Navigatable {
     private static final String PAGE_ELEMENT = "";
 
     protected final ConfigProperties properties;
+    private final SmartWait smartWait;
 
     @Autowired
-    public LoginPage(ConfigProperties properties) {
+    public LoginPage(ConfigProperties properties, SmartWait smartWait) {
         this.properties = properties;
+        this.smartWait = smartWait;
     }
 
     @Step("Navigate to login page")
@@ -39,6 +42,6 @@ public class LoginPage implements Navigatable {
     }
 
     public boolean waitPageToLoad() {
-        return false;
+        return smartWait.until(webDriver -> $("body").is(Condition.appear));
     }
 }
