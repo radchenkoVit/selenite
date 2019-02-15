@@ -2,12 +2,14 @@ package selenite.pages;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import selenite.configuration.ConfigProperties;
-import selenite.utils.wait.SmartWait;
+import selenite.utils.wait.SelWait;
 
 import static com.codeborne.selenide.Selenide.$;
 
@@ -17,12 +19,14 @@ public class LoginPage implements Navigatable {
     private static final String PAGE_ELEMENT = "";
 
     protected final ConfigProperties properties;
-    private final SmartWait smartWait;
+    private final SelWait softWait;
+    private final SelWait hardWait;
 
     @Autowired
-    public LoginPage(ConfigProperties properties, SmartWait smartWait) {
+    public LoginPage(ConfigProperties properties, @Qualifier("softWait") SelWait softWait, @Qualifier("hardWait") SelWait hardWait) {
         this.properties = properties;
-        this.smartWait = smartWait;
+        this.softWait = softWait;
+        this.hardWait = hardWait;
     }
 
     @Step("Navigate to login page")
@@ -41,7 +45,15 @@ public class LoginPage implements Navigatable {
         return $(PAGE_ELEMENT).is(Condition.appear);
     }
 
+    private static String LOCATOR = "#asdasd";
+
     public boolean waitPageToLoad() {
-        return smartWait.until(webDriver -> $("body").is(Condition.appear));
+//        SmartWait softWait = SmartWait.getInstance();
+        softWait.until(LOCATOR, l -> $(l).is(Condition.appear));
+        hardWait.until($("body"), SelenideElement::isDisplayed);
+//        String attr = softWait.until($("body"), e -> e.getAttribute("sss"));
+        return softWait.until(webDriver -> $("body").is(Condition.appear));
+
+//        return true;
     }
 }
