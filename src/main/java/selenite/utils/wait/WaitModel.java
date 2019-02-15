@@ -10,6 +10,7 @@ public class WaitModel {
     private Duration interval;
     private Supplier<String> message = () -> null;
     List<Class<? extends Throwable>> ignoredExceptions = new ArrayList<>();
+    private WaitMode waitMode;
 
     public WaitModel() {}
 
@@ -18,6 +19,7 @@ public class WaitModel {
         interval = builder.interval;
         message = builder.message;
         ignoredExceptions = builder.ignoredExceptions;
+        waitMode = builder.waitMode;
     }
 
     public Duration getTimeout() {
@@ -40,7 +42,8 @@ public class WaitModel {
         private Duration timeout = Duration.ofMillis(4000L);
         private Duration interval = Duration.ofMillis(500L);
         private Supplier<String> message = () -> null;
-        List<Class<? extends Throwable>> ignoredExceptions = new ArrayList<>();
+        private List<Class<? extends Throwable>> ignoredExceptions = new ArrayList<>();
+        private WaitMode waitMode = WaitMode.HARD;
 
         public Builder setTimeout(int timeout) {
             this.timeout = Duration.ofSeconds(timeout);
@@ -59,6 +62,11 @@ public class WaitModel {
 
         public Builder setIgnoredExceptions(List<Class<? extends Throwable>> ignoredExceptions) {
             this.ignoredExceptions = ignoredExceptions;
+            return this;
+        }
+
+        public Builder setWaitMode(WaitMode mode) {
+            this.waitMode = mode;
             return this;
         }
 
