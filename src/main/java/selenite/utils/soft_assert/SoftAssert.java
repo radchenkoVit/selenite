@@ -7,7 +7,7 @@ import static java.lang.String.format;
 import static selenite.utils.soft_assert.SoftErrorSeeker.getFailPlace;
 
 public class SoftAssert {
-    public static ThreadLocal<List<String>> threadErrors = ThreadLocal.withInitial(ArrayList::new);
+    private static ThreadLocal<List<String>> threadErrors = ThreadLocal.withInitial(ArrayList::new);
     private static final String FAILED_TEST_TOP_PATTERN = "Test failed\n. %s checks failed\n";
 
     public static void verifyErrors() {
@@ -17,6 +17,10 @@ public class SoftAssert {
 
             throw new AssertionError("Soft Assert: " + sb.toString());
         }
+    }
+
+    public static void fail(String reason) {
+        verifyOld(reason, false);
     }
 
     public static void verifyOld(String reason, boolean assertion) {

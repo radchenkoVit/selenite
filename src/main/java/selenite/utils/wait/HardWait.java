@@ -4,6 +4,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.WebDriver;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -15,9 +16,9 @@ public class HardWait extends CommonWait {
         return wait.until(function);
     }
 
-    public <T> T until(SelenideElement selenideElement, Function<? super SelenideElement, T> function) {
+    public <T> Optional<T> until(SelenideElement selenideElement, Function<? super SelenideElement, T> function) {
         System.out.println("Trigged hard Wait");
-        return wait.until(webDriver -> function.apply(selenideElement));
+        return Optional.of(wait.until(webDriver -> function.apply(selenideElement)));
     }
 
     public boolean until(String locator, Predicate<String> predicate) {
